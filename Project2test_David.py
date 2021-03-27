@@ -12,6 +12,10 @@ class Polymer:
         self.color = color          
         WorldMap[init_pos[0], init_pos[1]] = 1
 
+        # Generate polymer
+        for i in range(self.size):
+            self.update()
+
     # Updates the coordinates in the given direction and returns the new coordinates
     def walk(self, direction):
         x_old = self.body[self.step][0]
@@ -45,7 +49,7 @@ class Polymer:
                 break
             max_it += 1
         pass
-
+    
     # Plot polymer
     def plot(self):
         body = self.body
@@ -73,11 +77,6 @@ num_polymer = 20        # Number of polymers
 # Initialize polymers
 for i in range(num_polymer):
     polymers.append(Polymer(polymer_size, [450 + 5 * i, 500], np.random.uniform(0, 1, size= 3)))
-
-# Update polymers
-for i in range(polymer_size):
-    for polymer in polymers:
-        polymer.update()
 
 # Plot polymers
 for polymer in polymers:
