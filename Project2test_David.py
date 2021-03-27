@@ -1,5 +1,4 @@
 import numpy as np
-import enum
 import matplotlib.pyplot as plt
 
 class Polymer:
@@ -11,10 +10,6 @@ class Polymer:
         self.step = 0   
         self.color = color          
         WorldMap[init_pos[0], init_pos[1]] = 1
-
-        # Generate polymer
-        for i in range(self.size):
-            self.update()
 
     # Updates the coordinates in the given direction and returns the new coordinates
     def walk(self, direction):
@@ -49,7 +44,12 @@ class Polymer:
                 break
             max_it += 1
         pass
-    
+
+    # Generate polymer
+    def generate(self):            
+        for _ in range(self.size):
+            self.update()
+
     # Plot polymer
     def plot(self):
         body = self.body
@@ -67,20 +67,35 @@ def is_empty(coord):
     if(WorldMap[x, y] == 1):
         return False
 
+# An ensemble of polymers, takes the number of polymers, their size and initial positions
+class Ensemble(Polymer):
+
+    polymers = []
+
+    def __init__(self, num_polymers, size, init_pos):
+        self.size = size
+        self.init_pos = init_pos
+        self.num_polymers = num_polymers
+        
+        for i in range(num_polymers):
+            self.polymers.append(Polymer(size, init_pos[i], np.random.uniform(0, 1, size= 3)))
+        
+        for polymer in self.polymers:
+            polymer.generate()
+
+    def plot(self):
+        for polymer in self.polymers:
+            polymer.plot()
+
 worldsize = 5000
 WorldMap = np.zeros(shape=(worldsize, worldsize))
 
-polymers = []           # List to store the polymers
 polymer_size = 1000     # Max length of polymer
 num_polymer = 20        # Number of polymers
+init_pos = [[450 + 5 * i, 500] for i in range(num_polymer)]
 
-# Initialize polymers
-for i in range(num_polymer):
-    polymers.append(Polymer(polymer_size, [450 + 5 * i, 500], np.random.uniform(0, 1, size= 3)))
-
-# Plot polymers
-for polymer in polymers:
-    polymer.plot()
+ensemble = Ensemble(num_polymer, polymer_size, init_pos)
+ensemble.plot()
 
 plt.axis('equal')
 plt.show()
