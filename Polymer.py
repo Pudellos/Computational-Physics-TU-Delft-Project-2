@@ -1,3 +1,4 @@
+from WorldMap import WorldMap
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -66,36 +67,3 @@ def is_empty(coord):
         return True
     if(WorldMap[x, y] == 1):
         return False
-
-# An ensemble of polymers, takes the number of polymers, their size and initial positions
-class Ensemble(Polymer):
-
-    polymers = []
-
-    def __init__(self, num_polymers, size, init_pos):
-        self.size = size
-        self.init_pos = init_pos
-        self.num_polymers = num_polymers
-        
-        for i in range(num_polymers):
-            self.polymers.append(Polymer(size, init_pos[i], np.random.uniform(0, 1, size= 3)))
-        
-        for polymer in self.polymers:
-            polymer.generate()
-
-    def plot(self):
-        for polymer in self.polymers:
-            polymer.plot()
-
-worldsize = 5000
-WorldMap = np.zeros(shape=(worldsize, worldsize))
-
-polymer_size = 1000     # Max length of polymer
-num_polymer = 20        # Number of polymers
-init_pos = [[450 + 5 * i, 500] for i in range(num_polymer)]
-
-ensemble = Ensemble(num_polymer, polymer_size, init_pos)
-ensemble.plot()
-
-plt.axis('equal')
-plt.show()
