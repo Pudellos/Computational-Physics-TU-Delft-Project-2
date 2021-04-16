@@ -32,6 +32,28 @@ You will find how to include [links](https://docs.gitlab.com/ee/user/markdown.ht
 useful.
 
 ## Week 1
+
+We use Object Oriented Programming.
+
+Our code makes a 'mesoscopic' model of the polymer. This week we prepare the basic starting code for the model. The model is made up of 'a chain consisting of beads: the beads represent segments of the polymer; the segments in turn represent groups of atoms.' The model is valid based on the idea of universality,
+'only a few major features of the interactions at small length scales influence the
+behaviour on longer length scales; the details do not matter'. (ref. section 10.6.1, paragraphs 1-3  https://compphys.quantumtinkerer.tudelft.nl/downloads/Thijssen_Chapter10_Monte_Carlo_Method.pdf)
+
+The model is made up of N beads that are represented as point particles. The beads are placed on a square lattice so distances between adjacent beads are fixed to one dimensionless unit length and bonding angles are 90 degrees. We use Rosenbluth so we start with one bead and build our polymer as a self-avoiding random walk by adding next beads to the polymer. The vacant lattice points surrounding a bead are filled at random, with a restiction that no two beads can be placed on top of each other.
+
+Files:
+- The polymers grow on the square lattice given by WorldMap.py file.
+- The file Polymer.py contains Polymer class definition. Polymer instance has atributes of size, initial position, step and color. The class methods are Walk (generates a path step for polymer growth), Update (it uses Walk to generate a new growth step and implements it if the step is valid e.g. no self-corssing etc. A new step is searched for untial a valid step is found or no solution is found within given number of trails), Generate (which implemets Update on all polymer beads), Plot (which displays the polymer on the image of a lattice)
+- The file Ensemble.py contains definition of Ensemble class. Class atributes are size, initial position and umber of polymers. The class is created by assembling a given  number of Polymers with given initial positions and placing them on the WorldMap lattice.
+- The file main.py contains the sumulation code which uses other files mentioned above to generate the ensamble of polymers and grow them until they trap themselves or reach a maximum preset size.
+A result of the code, with 20 polymers and max size of 1000 beads is presented below. Initial positions are chosen to cover a range of the lattice and give each polymer some space to grow.
+![alt text](figures/20Polymers_growth.png "Title Text")
+ - the file Project2test.py is a trail used to develop the code ideas.
+
+Future improvements:
+The polymer so far can trap itself if no vacant lattice points are available for growth. This problem will be dealt with at a later point. 
+At a later point we will also extract physicsal quantities from our simulation, particularly track the length of the polymers and use it to calculate radius of gyration.
+
 (due before 21 April)
 
 
