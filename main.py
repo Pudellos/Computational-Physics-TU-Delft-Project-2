@@ -9,6 +9,8 @@ init_pos = [[450 + 5 * i, 500] for i in range(num_polymer)]
 
 ensemble = Ensemble(num_polymer, polymer_size, init_pos)
 ensemble.plot()
+print('lengths that polymers reach:')
+print(ensemble.lengths)
 
 plt.axis('equal')
 plt.show()

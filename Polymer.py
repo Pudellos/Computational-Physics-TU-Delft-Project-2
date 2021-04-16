@@ -10,7 +10,9 @@ class Polymer:
         self.body = [init_pos]
         self.step = 0   
         self.color = color          
+        self.length = 0
         WorldMap[init_pos[0], init_pos[1]] = 1
+        
 
     # Updates the coordinates in the given direction and returns the new coordinates
     def walk(self, direction):
@@ -44,6 +46,8 @@ class Polymer:
                 self.step += 1
                 break
             max_it += 1
+            self.length += 1
+
         pass
 
     # Generate polymer
