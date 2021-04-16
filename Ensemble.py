@@ -12,6 +12,7 @@ class Ensemble(Polymer):
         self.init_pos = init_pos
         self.num_polymers = num_polymers
         self.lengths = []
+        self.colors = []
  
         
         
@@ -22,6 +23,7 @@ class Ensemble(Polymer):
         for polymer in self.polymers:
             polymer.generate()
             self.lengths.append(polymer.length)
+            self.colors.append(str(polymer.color))
             
 
     def plot(self):

@@ -10,6 +10,7 @@ init_pos = [[450 + 5 * i, 500] for i in range(num_polymer)]
 ensemble = Ensemble(num_polymer, polymer_size, init_pos)
 ensemble.plot()
 print('lengths that polymers reach:')
+# print(ensemble.colors) # unfortunatley colors aren't a name, but as RGB values for now. But lengths printed correspond to a particular polymer, identified based on it's color.
 print(ensemble.lengths)
 
 plt.axis('equal')
