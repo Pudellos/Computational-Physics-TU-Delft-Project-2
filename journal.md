@@ -53,6 +53,7 @@ A result of the code, with 20 polymers and max size of 1000 beads is presented b
 Future improvements:
 The polymer so far can trap itself if no vacant lattice points are available for growth. This problem will be dealt with at a later point. 
 At a later point we will also extract physicsal quantities from our simulation, particularly track the length of the polymers and use it to calculate radius of gyration.
+(Code for tracking length of grown polymers is included already)
 
 (due before 21 April)
 
