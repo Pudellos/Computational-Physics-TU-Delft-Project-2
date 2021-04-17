@@ -7,26 +7,23 @@ class Ensemble(Polymer):
 
     polymers = []
 
-    def __init__(self, num_polymers, size, init_pos):
+    def __init__(self, num_polymers, size, init_pos, WorldMap):
         self.size = size
         self.init_pos = init_pos
         self.num_polymers = num_polymers
         self.lengths = []
         self.colors = []
- 
-        
-        
+        self.WM = WorldMap
+         
         for i in range(num_polymers):
-            self.polymers.append(Polymer(size, init_pos[i], np.random.uniform(0, 1, size= 3)))
-            
-            
+            self.polymers.append(Polymer(size, init_pos[i], self.WM, np.random.uniform(0, 1, size= 3)))
+                      
         for polymer in self.polymers:
             polymer.generate()
-            self.lengths.append(polymer.length)
+            l = polymer.length()
+            self.lengths.append(l)
             self.colors.append(str(polymer.color))
             
-
     def plot(self):
         for polymer in self.polymers:
             polymer.plot()
-
