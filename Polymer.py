@@ -36,7 +36,6 @@ class Polymer:
 
         directions = np.array([[1, 0], [0, 1], [-1, 0], [0, -1]])
         
-
         max_it = 0  # Max number of iterations, to stop the loop if the polymer gets stuck
         while(max_it < 10):
             m_i = 0
@@ -87,4 +86,3 @@ class Polymer:
             return True
         if(self.WM[x, y] == 1):
             return False
-

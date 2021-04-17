@@ -35,7 +35,7 @@ if(sys.argv[1] == "r_sq_example"):
         polymer.generate()    
         
         weights[i] = polymer.weight
-        r_sq[i] = polymer.end_to_end_dist()       
+        r_sq[i] = int(polymer.end_to_end_dist())**2       
 
     avg_r_sq = sum([weights[i] * r_sq[i] for i in range(N)]) / sum(weights)
 
