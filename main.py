@@ -46,6 +46,7 @@ if(sys.argv[1] == "r_sq_vs_L"):
     N = 100
     L = 50
     avg_r_sq= np.zeros(L)
+    s=np.zeros(L)
     for l in range(L):
         weights = np.zeros(N)
         r_sq = np.zeros(N)
