@@ -16,7 +16,7 @@ class Ensemble(Polymer):
         self.WM = WorldMap
          
         for i in range(num_polymers):
-            self.polymers.append(Polymer(size, init_pos[i], self.WM, np.random.uniform(0, 1, size= 3)))
+            self.polymers.append(Polymer(size, init_pos[i], self.WM, np.random.uniform(0, 1, size= 3), ensemble = True))
                       
         for polymer in self.polymers:
             polymer.generate()

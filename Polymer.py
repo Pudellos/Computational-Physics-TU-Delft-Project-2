@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 
 class Polymer:
 
-    def __init__(self, size, init_pos, WorldMap, color = 'k'):
+    def __init__(self, size, init_pos, WorldMap, color = 'k', ensemble = False):
         self.size = size
         self.init_pos = init_pos
         self.body = [init_pos]
@@ -13,47 +14,30 @@ class Polymer:
         self.WM = WorldMap
         self.WM[init_pos[0], init_pos[1]] = 1
 
-    # Updates the coordinates in the given direction and returns the new coordinates
-    def walk(self, direction):
-        x_old = self.body[self.step][0]
-        y_old = self.body[self.step][1]
-        x_new = x_old
-        y_new = y_old
-
-        if(direction == 1):
-            y_new += 1
-        if(direction == 2):
-            y_new -= 1
-        if(direction == 3):
-            x_new += 1
-        if(direction == 4):
-            x_new -= 1
-
-        return [x_new, y_new]
+        if(not ensemble):
+            self.generate()
 
     # Updates the polymer. It chooses a random direction and checks if the new spot is empty.
     def update(self):   
 
+        current_coords = self.body[self.step]
         directions = np.array([[1, 0], [0, 1], [-1, 0], [0, -1]])
+        possible_dirs = []  
+
+        for direction in directions:
+            if(self.is_empty(current_coords + direction)):
+                possible_dirs.append(direction)
         
-        max_it = 0  # Max number of iterations, to stop the loop if the polymer gets stuck
-        while(max_it < 10):
-            m_i = 0
-            for i in range(0, 4):
-                if(self.is_empty(self.body[self.step] + directions[i])):
-                    m_i += 1  
-
-            i = np.random.randint(1, 5)         # Choose a random direction
-            new_coords = self.walk(i)           # Walk in that direction
-
-            if(self.is_empty(new_coords)):      # Check is that new spot is empty. If yes, then add the new position to body 
-                self.body.append(new_coords)    # and update worldmap. If no, choose new direction and repeat. 
-                self.WM[new_coords[0], new_coords[1]] = 1
-                self.weight *= m_i
-                self.step += 1
-                break
-            max_it += 1     
-        pass
+        m = len(possible_dirs)
+        
+        if(m != 0):
+            new_coords = current_coords + random.choice(possible_dirs)
+            self.body.append(new_coords)
+            self.WM[new_coords[0], new_coords[1]] = 1
+            self.weight *= m
+            self.step += 1
+        else:
+            pass
 
     # Generate polymer
     def generate(self):            

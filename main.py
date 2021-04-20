@@ -19,6 +19,7 @@ if(sys.argv[1] == "ensemble_example"):
     # print(ensemble.colors) # unfortunatley colors aren't a name, but as RGB values for now. 
                         # But lengths printed correspond to a particular polymer, identified based on it's color.
     print(ensemble.lengths)
+
     plt.axis('equal')
     plt.show()
 
@@ -30,14 +31,12 @@ if(sys.argv[1] == "r_sq_example"):
     r_sq = np.zeros(N)
 
     for i in range(N):
-        WorldMap = np.zeros(shape=(3 * L, 3 * L))
-        polymer = Polymer(L, [L, L], WorldMap)
-        polymer.generate()    
+        box = np.zeros(shape=(3 * L, 3 * L))
+        polymer = Polymer(L, [L, L], box)
         
         weights[i] = polymer.weight
-        r_sq[i] = int(polymer.end_to_end_dist())**2       
+        r_sq[i] = polymer.end_to_end_dist()**2       
 
     avg_r_sq = sum([weights[i] * r_sq[i] for i in range(N)]) / sum(weights)
 
-    print(weights, r_sq)    
     print(avg_r_sq)
