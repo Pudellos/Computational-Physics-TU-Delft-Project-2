@@ -37,11 +37,12 @@ class Polymer:
             self.weight *= m
             self.step += 1
         else:
+            self.weight *= m
             pass
 
     # Generate polymer
     def generate(self):            
-        for _ in range(self.size):
+        for _ in range(self.size - 1):
             self.update()
 
     # Get the end-to-end distance of the polymer

@@ -26,9 +26,10 @@ if(sys.argv[1] == "ensemble_example"):
 # If you want to run this, run this in the terminal -> python main.py r_sq_example
 if(sys.argv[1] == "r_sq_example"):
     N = 100
-    L = 5
+    L = 20
     weights = np.zeros(N)
     r_sq = np.zeros(N)
+    lengths = np.zeros(N)
 
     for i in range(N):
         box = np.zeros(shape=(3 * L, 3 * L))
@@ -36,36 +37,39 @@ if(sys.argv[1] == "r_sq_example"):
         
         weights[i] = polymer.weight
         r_sq[i] = polymer.end_to_end_dist()**2       
+        lengths[i] = polymer.length()
 
-    avg_r_sq = sum([weights[i] * r_sq[i] for i in range(N)]) / sum(weights)
-
+    avg_r_sq = sum(weights * r_sq) / sum(weights)
+    print(weights, r_sq, lengths)
+    print(sum([1 for i in weights if i == 0 ]))
     print(avg_r_sq)
     
 # If you want to run this, run this in the terminal -> python main.py r_sq_vs_L
 if(sys.argv[1] == "r_sq_vs_L"):
-    N = 100
-    L = 50
-    avg_r_sq= np.zeros(L)
-    s=np.zeros(L)
-    for l in range(L):
-        weights = np.zeros(N)
-        r_sq = np.zeros(N)
-        for i in range(N):
-                box = np.zeros(shape=(3 * L, 3 * L))
-                polymer = Polymer(l, [L, L], box)
-                weights[i] = polymer.weight
-                r_sq[i] = polymer.end_to_end_dist()**2       
-        avg_r_sq[l] = sum(weights* r_sq) / sum(weights)
-        s[l]=((N/(N-1))*(sum(((weights)**2)*(r_sq-avg_r_sq[l])**2))/(sum(weights)**2))**(1/2)
-    #I have not yet found out how to plot the figure within the terminal.
-    length=np.arange(0,L)
-    plt.figure(1)
-    plt.errorbar(length,avg_r_sq,s, label = 'Simulated average $r^2$')
-    plt.plot(length,length**(3/2), label = 'L^(3/2)')
-    plt.xlabel('L')
-    plt.ylabel('Radius of gyration')
-    plt.legend()
-    plt.show()
-        
 
-        
+    for j in [1000, 2000, 5000]:
+        print(j)
+        N = j
+        L = 50
+        avg_r_sq= np.zeros(L)
+        s=np.zeros(L)
+        for l in range(L):
+            weights = np.zeros(N)
+            r_sq = np.zeros(N)
+            for i in range(N):
+                    box = np.zeros(shape=(3 * L, 3 * L))
+                    polymer = Polymer(l, [L, L], box)
+                    weights[i] = polymer.weight
+                    r_sq[i] = polymer.end_to_end_dist()**2       
+            avg_r_sq[l] = sum(weights * r_sq) / sum(weights)
+            s[l] = ( ( N / (N - 1) ) * ( sum( ( (weights)**2 ) * (r_sq - avg_r_sq[l])**2 ) )/ ( sum(weights)**2) )**(1/2)
+        #I have not yet found out how to plot the figure within the terminal.
+        length=np.arange(0,L)
+        plt.figure(1)
+        plt.errorbar(length, avg_r_sq, s, label = r'Simulated average $r^2$, N = %s' %(j))
+
+    plt.plot(length,length**(3/2), label = r'$L^{3/2}$')
+    plt.xlabel('L')
+    plt.ylabel(r'Radius of gyration $\langle r^2(L) \rangle$')
+    plt.legend()
+    plt.show()     
