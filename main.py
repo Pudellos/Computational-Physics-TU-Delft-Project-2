@@ -45,9 +45,20 @@ if(sys.argv[1] == "r_sq_example"):
     print(avg_r_sq)
     
 # If you want to run this, run this in the terminal -> python main.py r_sq_vs_L
-if(sys.argv[1] == "r_sq_vs_L"):
 
-    for j in [1000, 2000, 5000]:
+#Model to be fitted to the data:
+from scipy.odr import *
+def func(p, x):
+    m, c = p
+    return m*(x**(3/2)) + c
+model = Model(func)
+m,c,fit_error_m,fit_error_c=np.zeros(30),np.zeros(30),np.zeros(30),np.zeros(30)
+
+colors=['red','blue','green']
+
+if(sys.argv[1] == "r_sq_vs_L"):
+    col=0
+    for j in [1000,2000,3000]:
         print(j)
         N = j
         L = 50
@@ -65,11 +76,23 @@ if(sys.argv[1] == "r_sq_vs_L"):
             s[l] = ( ( N / (N - 1) ) * ( sum( ( (weights)**2 ) * (r_sq - avg_r_sq[l])**2 ) )/ ( sum(weights)**2) )**(1/2)
         #I have not yet found out how to plot the figure within the terminal.
         length=np.arange(0,L)
-        plt.figure(1)
-        plt.errorbar(length, avg_r_sq, s, label = r'Simulated average $r^2$, N = %s' %(j))
-
-    plt.plot(length,length**(3/2), label = r'$L^{3/2}$')
+        plt.figure(1,figsize=(11,9))
+        plt.errorbar(length, avg_r_sq, s, label = r'Simulated average $r^2$, N = %s' %(j),color=colors[col],alpha=0.5)
+        
+        #Validating the model (proportional to L^(3/2)):
+        s[(np.where(s==0))]=0.00001
+        data = RealData(length, avg_r_sq, sx=np.full(L,1/np.sqrt(L)), sy=s)
+        odr = ODR(data, model, beta0=[0., 1.])
+        out = odr.run()
+        plt.plot(np.linspace(length[0], length[-1], 1000), func(out.beta, np.linspace(length[0], length[-1], 1000)),color=colors[col],label='fit$\propto L^{3/2}$ to data')  
+        m[col],c[col],fit_error_m[col],fit_error_c[col]=out.beta[0],out.beta[1],out.sd_beta[0],out.sd_beta[1]
+        col+=1
+        
+    plt.title('Radius of gyration vs polymer length, based on data from N polymers')
     plt.xlabel('L')
     plt.ylabel(r'Radius of gyration $\langle r^2(L) \rangle$')
     plt.legend()
-    plt.show()     
+    plt.show() 
+    
+    print('fit parameters for the modelled curves (in order of appearing in the legend), (for meaning of symbols look at the model):')    
+    print('m=',m[np.where(m!=0)],'std_of_m=',fit_error_m[np.where(fit_error_m!=0)],'c=',c[np.where(c!=0)],'std_of_c=',fit_error_c[np.where(fit_error_c!=0)])
