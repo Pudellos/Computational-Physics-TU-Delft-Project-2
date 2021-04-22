@@ -69,7 +69,7 @@ A figure showing the dependence of the radius of gyration on length of the polym
 The errors associated with the radius of gyration were calculated as 'estimated standard deviation of the set' of radii of gyration of N polymers. (ref.https://compphys.quantumtinkerer.tudelft.nl/proj2-polymers/). The error forumla is:
 $r_{unc}= \sqrt{\frac{N}{N-1}\frac{\sum_{k=1}^{N} (w_k^{(L)})^2 \times (r^2_k(L)-\langle r^2(L) \rangle)^2}{(\sum_{k=1}^{N} (w_k^{(L)}))^2}}$
 The errorbars are included in the plot of $r_{gyration}$ vs L.
-Our model predicts that radius of gyration is proportional to $L^{3/2}$. The curves are modelled as $m \times L^{3/2} +c$ ,where m and c are constants. The model is fitted to the data via orthogonal distance regression method, the proportionality constants m and c are determined along with their standard deviations. The model is verified, indeed radius of gyration is proportional to $L^{3/2}$. The standard deviations of fit parameters are of order O() Visualisation of this:
+Our model predicts that radius of gyration is proportional to $L^{3/2}$. The curves are modelled as $m \times L^{3/2} +c$ ,where m and c are constants. The model is fitted to the data via orthogonal distance regression method, the proportionality constants m and c are determined along with their standard deviations. The model is verified, indeed radius of gyration is proportional to $L^{3/2}$. The standard deviations of fit parameters are of order O(10^-2) Visualisation of this:
 
 ![alt text](figures/rad_gyr_vs_L.png "Title Text")
 
