@@ -42,7 +42,7 @@ class Polymer:
 
     # Generate polymer
     def generate(self):            
-        for _ in range(self.size - 1):
+        for _ in range(self.size):
             self.update()
 
     # Get the end-to-end distance of the polymer
@@ -53,7 +53,7 @@ class Polymer:
 
     # Returns the length of the polymer
     def length(self):
-        return len(self.body)
+        return len(self.body) - 1
 
     # Plot polymer
     def plot(self):
