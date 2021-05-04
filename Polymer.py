@@ -1,20 +1,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import random
+import random, copy
 
 class Polymer:
 
-    def __init__(self, size, init_pos, WorldMap, color = 'k', ensemble = False):
+    def __init__(self, size, init_pos, WorldMap, color = 'k', ensemble = False, PERM = False):
         self.size = size
         self.init_pos = init_pos
         self.body = [init_pos]
         self.weight = 1
         self.step = 0   
         self.color = color          
-        self.WM = WorldMap
+        self.WM = copy.deepcopy(WorldMap)
         self.WM[init_pos[0], init_pos[1]] = 1
 
-        if(not ensemble):
+        if(not ensemble and not PERM):
             self.generate()
 
     # Updates the polymer. It chooses a random direction and checks if the new spot is empty.
@@ -32,7 +32,7 @@ class Polymer:
         
         if(m != 0):
             new_coords = current_coords + random.choice(possible_dirs)
-            self.body.append(new_coords)
+            self.body.append(list(new_coords))
             self.WM[new_coords[0], new_coords[1]] = 1
             self.weight *= m
             self.step += 1
@@ -49,6 +49,7 @@ class Polymer:
     def end_to_end_dist(self):
         self.body = np.array(self.body) 
         diff = np.array(self.body[-1] - self.body[0])
+        self.body = list(self.body)
         return np.linalg.norm(diff)
 
     # Returns the length of the polymer

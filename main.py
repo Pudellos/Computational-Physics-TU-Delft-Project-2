@@ -1,4 +1,4 @@
-import sys, time
+import sys, time, copy
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.odr import *
@@ -64,7 +64,7 @@ if(sys.argv[1] == "r_sq_vs_L"):
     model = Model(func)
     m, fit_error_m = np.zeros(30), np.zeros(30)
 
-    L = 10
+    L = 20
     avg_r_sq = np.zeros(L)
     s = np.zeros(L)
 
@@ -102,8 +102,88 @@ if(sys.argv[1] == "r_sq_vs_L"):
     plt.legend()
     plt.show() 
 
-
 if(sys.argv[1] == "test"):
     for i in range(10):
         print(i, end='\r')
         time.sleep(1)
+
+if(sys.argv[1] == "PERM"):
+    
+    #Model to be fitted to the data:
+    func = lambda m, x : m * ( x**(3/2) )
+    model = Model(func)
+    m, fit_error_m = np.zeros(30), np.zeros(30)
+
+    # Constants
+    Lmax = 50
+    N = 1000
+    cp = 10
+    cm = 1
+
+    s = np.zeros(Lmax)
+    avg_r_sq = np.zeros(Lmax)
+
+    # Initialize polymers
+    box = np.zeros(shape=(3 * Lmax, 3 * Lmax))
+    polymers = [Polymer(Lmax, [Lmax, Lmax], box, PERM= True) for _ in range(N)]
+    
+    # PERM Algorithm 
+    for L in range(1, Lmax):
+
+        # Grow all polymers by one step
+        weights = np.zeros(len(polymers))
+        r_sq = np.zeros(len(polymers))
+
+        for i, polymer in enumerate(polymers):
+            polymer.update()
+            weights[i] = polymer.weight
+            r_sq[i] = polymer.end_to_end_dist()**2   
+            
+        # Calculate average weight and W+, W-
+        Wavg = np.mean(weights)
+        Wp = cp * Wavg
+        Wm = cm * Wavg
+
+        for i, polymer in enumerate(polymers):
+            # Pruning
+            if(polymer.weight < Wm):
+                rand = np.random.uniform(0, 1)
+                if(rand < 0.5):
+                    weights[i] = 0 # This polymer is not used calculation for <r^2(L)>
+                else:
+                    polymer.weight *= 2 # Next weight
+                    weights[i] *= 2 # Current weight
+            # Enrichment
+            if(polymer.weight > Wp):
+                polymer.weight *= 0.5
+                polymers.append(copy.deepcopy(polymer))
+
+                weights[i] *= 0.5
+                weights = np.append(weights, np.array(weights[i]) )
+                r_sq = np.append(r_sq, np.array(r_sq[i]) )
+
+        avg_r_sq[L] = sum(weights * r_sq) / sum(weights)        
+        s[L] = ( ( N / (N - 1) ) * ( sum( ( (weights)**2 ) * (r_sq - avg_r_sq[L])**2 ) )/ ( sum(weights)**2) )**(1/2)
+
+
+    length = np.arange(0, Lmax)
+    plt.figure(1, figsize=(11, 9))
+    plt.errorbar(length, avg_r_sq, s, label = r'Simulated average $r^2$')
+    
+
+    # Validating the model (proportional to L^(3/2)):
+    s[(np.where(s==0))]=0.00001
+    data = RealData(length, avg_r_sq, sx = np.full(Lmax, 1 / np.sqrt(Lmax)), sy = s)
+    odr = ODR(data, model, beta0 = [0.])
+    out = odr.run()
+    m, fit_error_m = out.beta[0], out.sd_beta[0]
+
+    length_ = np.linspace(length[0], length[-1], 1000)
+    plt.plot(length_, func(m, length_), label = 'fit$\propto L^{3/2}$ to data')  
+    plt.show()
+
+        
+
+      
+
+     
