@@ -126,6 +126,7 @@ if(sys.argv[1] == "PERM"):
     # Initialize polymers
     box = np.zeros(shape=(3 * Lmax, 3 * Lmax))
     polymers = [Polymer(Lmax, [Lmax, Lmax], box, PERM= True) for _ in range(N)]
+    dead = np.ones(len(polymers))
     
     # PERM Algorithm 
     for L in range(1, Lmax):
@@ -135,9 +136,11 @@ if(sys.argv[1] == "PERM"):
         r_sq = np.zeros(len(polymers))
 
         for i, polymer in enumerate(polymers):
-            polymer.update()
-            weights[i] = polymer.weight
-            r_sq[i] = polymer.end_to_end_dist()**2   
+            if(dead[i] == 1):
+                polymer.update()
+                weights[i] = polymer.weight
+                r_sq[i] = polymer.end_to_end_dist()**2
+                
             
         # Calculate average weight and W+, W-
         Wavg = np.mean(weights)
@@ -150,6 +153,7 @@ if(sys.argv[1] == "PERM"):
                 rand = np.random.uniform(0, 1)
                 if(rand < 0.5):
                     weights[i] = 0 # This polymer is not used calculation for <r^2(L)>
+                    dead[i] = 0
                 else:
                     polymer.weight *= 2 # Next weight
                     weights[i] *= 2 # Current weight
@@ -161,6 +165,7 @@ if(sys.argv[1] == "PERM"):
                 weights[i] *= 0.5
                 weights = np.append(weights, np.array(weights[i]) )
                 r_sq = np.append(r_sq, np.array(r_sq[i]) )
+                dead = np.append(dead,1)
 
         avg_r_sq[L] = sum(weights * r_sq) / sum(weights)        
         s[L] = ( ( N / (N - 1) ) * ( sum( ( (weights)**2 ) * (r_sq - avg_r_sq[L])**2 ) )/ ( sum(weights)**2) )**(1/2)
