@@ -166,9 +166,9 @@ if(sys.argv[1] == "PERM"):
                 weights = np.append(weights, np.array(weights[i]) )
                 r_sq = np.append(r_sq, np.array(r_sq[i]) )
                 dead = np.append(dead,1)
-
+        alive = len( dead [ dead == 1 ] )
         avg_r_sq[L] = sum(weights * r_sq) / sum(weights)        
-        s[L] = ( ( N / (N - 1) ) * ( sum( ( (weights)**2 ) * (r_sq - avg_r_sq[L])**2 ) )/ ( sum(weights)**2) )**(1/2)
+        s[L] = ( ( alive / (alive - 1) ) * ( sum( ( (weights)**2 ) * (r_sq - avg_r_sq[L])**2 ) )/ ( sum(weights)**2) )**(1/2)
 
 
     length = np.arange(0, Lmax)
