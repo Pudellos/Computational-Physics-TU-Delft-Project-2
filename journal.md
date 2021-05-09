@@ -82,9 +82,11 @@ Fit parameters for the modelled curves (in order of appearing in the legend), (f
 
 
 ## Week 3
-We succeeded in implementing the PERM algorithm with errorbars. The results (Figures) can be seen in our Latex report. The Polymer class has barely been modified. To implement the new algorithm, we used instances of the Polymer class to manually update our the polymers. After every growth step we calculate the mean of the weights and applied pruning and enrichment according to the PERM algorithm. During the growing we also keep track of the mean square displacement at every length.
+We succeeded in implementing the PERM algorithm with errorbars. See the figure below for the results, further results can be seen in our Latex report. The Polymer class has barely been modified. To implement the new algorithm, we used instances of the Polymer class to manually update our the polymers. After every growth step we calculate the mean of the weights and applied pruning and enrichment according to the PERM algorithm. During the growing we also keep track of the mean square displacement at every length.
 
 Link to the Latex report: https://www.overleaf.com/read/qjfzvjskjtyb
+
+![alt text](figures/PERM.png)
 
 (due before 5 May)
 
