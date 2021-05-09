@@ -82,6 +82,9 @@ Fit parameters for the modelled curves (in order of appearing in the legend), (f
 
 
 ## Week 3
+
+Link to the latex report: https://www.overleaf.com/read/qjfzvjskjtyb
+
 (due before 5 May)
 
 
