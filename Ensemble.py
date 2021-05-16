@@ -15,15 +15,17 @@ class Ensemble(Polymer):
         self.colors = []
         self.WM = WorldMap
          
+        # Create an instance of the polymers, each a random color and different position in the same map
         for i in range(num_polymers):
-            self.polymers.append(Polymer(size, init_pos[i], self.WM, np.random.uniform(0, 1, size= 3), ensemble = True))
+            self.polymers.append(Polymer(size, init_pos[i], self.WM, np.random.uniform(0, 1, size= 3), ensemble=True, PERM=False))
                       
+        # Grow each polymer one step at a time
         for polymer in self.polymers:
             polymer.generate()
             l = polymer.length()
             self.lengths.append(l)
             self.colors.append(str(polymer.color))
-            
+       
     def plot(self):
         for polymer in self.polymers:
             polymer.plot()

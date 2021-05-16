@@ -11,10 +11,14 @@ class Polymer:
         self.weight = 1
         self.step = 0   
         self.color = color          
-        self.WM = copy.deepcopy(WorldMap)
-        self.WM[init_pos[0], init_pos[1]] = 1
+        
+        if(ensemble):
+            self.WM = WorldMap # If you generate a ensemble, you want to use the same worldmap for every polymer
+            self.WM[init_pos[0], init_pos[1]] = 1
 
         if(not ensemble and not PERM):
+            self.WM = copy.deepcopy(WorldMap) # When using PERM, you want a different map for each polymer, therefore the deepcopy
+            self.WM[init_pos[0], init_pos[1]] = 1
             self.generate()
 
     # Updates the polymer. It chooses a random direction and checks if the new spot is empty.
@@ -65,8 +69,7 @@ class Polymer:
 
     # Checks if the coordinate is occupied on the worldmap
     def is_empty(self, coord):
-        x = coord[0]
-        y = coord[1]
+        x, y = coord[0], coord[1]
 
         if(self.WM[x, y] == 0):
             return True

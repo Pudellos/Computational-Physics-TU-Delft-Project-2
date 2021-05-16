@@ -5,6 +5,7 @@ from scipy.odr import *
 from Polymer import Polymer
 from Ensemble import Ensemble
 
+# Calculate the average of the radius of gyration, given a length, max length and number of polyers
 def calc_avg_r_sq(l, N, L):
     weights = np.zeros(N)
     r_sq = np.zeros(N)
@@ -17,25 +18,25 @@ def calc_avg_r_sq(l, N, L):
     s = ( ( N / (N - 1) ) * ( sum( ( (weights)**2 ) * (r_sq - avg_r_sq)**2 ) )/ ( sum(weights)**2) )**(1/2)
     return avg_r_sq, s
 
+# This piece of code generate an ensemble of polymers using the Ensemble class
 # If you want to run this, run this in the terminal -> python main.py ensemble_example
 if(sys.argv[1] == "ensemble_example"):
     worldsize = 5000
     WorldMap = np.zeros(shape=(worldsize, worldsize))
 
-    polymer_size = 1000     # Max length of polymer
+    polymer_size = 100     # Max length of polymer
     num_polymer = 20        # Number of polymers
     init_pos = [[450 + 5 * i, 500] for i in range(num_polymer)]
 
     ensemble = Ensemble(num_polymer, polymer_size, init_pos, WorldMap)
     ensemble.plot()
     print('lengths that polymers reach:')
-    # print(ensemble.colors) # unfortunatley colors aren't a name, but as RGB values for now. 
-                        # But lengths printed correspond to a particular polymer, identified based on it's color.
     print(ensemble.lengths)
 
     plt.axis('equal')
     plt.show()
 
+# Here we calculate the radius of gyration for N polymers and print the results
 # If you want to run this, run this in the terminal -> python main.py r_sq_example
 if(sys.argv[1] == "r_sq_example"):
     N = 100
@@ -57,6 +58,8 @@ if(sys.argv[1] == "r_sq_example"):
     print(sum([1 for i in weights if i == 0 ]))
     print(avg_r_sq)
 
+# Here we do the same as before, but now we plot the results and fit a curve to the results
+# If you want to run this, run this in the terminal -> python main.py r_sq_vs_L
 if(sys.argv[1] == "r_sq_vs_L"):
 
     #Model to be fitted to the data:
@@ -102,11 +105,8 @@ if(sys.argv[1] == "r_sq_vs_L"):
     plt.legend()
     plt.show() 
 
-if(sys.argv[1] == "test"):
-    for i in range(10):
-        print(i, end='\r')
-        time.sleep(1)
-
+# Here we implemented the PERM algorithm, and plot the results with error bars and a fitted curve
+# If you want to run this, run this in the terminal -> python main.py PERM
 if(sys.argv[1] == "PERM"):
     
     #Model to be fitted to the data:
